@@ -1,6 +1,7 @@
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-public class Vacationer implements Runnable {
+public class Vacationer extends Thread implements Runnable {
 	/*
 	 * the instance variable 'fishingTools' represents if a vacationer has a fishing rod and/or bait
 	 * fishingTools[0] represents the acquisition of a fishing rod. True value indicates the vacationer has a rod
@@ -8,45 +9,32 @@ public class Vacationer implements Runnable {
 	 */
 	private boolean[] fishingTools;
 	/*
-	 * The boolean variable 'ReadyToFish' suggests if a vacationer would like the opportunity to fish.
-	 * If this instance variable is set to true then the vacationer would like to fish
-	 * If this instance variable is set to false the vacationer has already fished
-	 */
-	private boolean ReadyToFish;
-	/*
 	 * A counter for the number of fish caught by a vacationer.
 	 */
 	private int CaughtFish;
+	/*
+	 * reference to main thread
+	 */
 	private Vacation vac;
+	/*
+	 * name of vacationer
+	 */
+	private int name;
 	
 	/*
-	 * constructor sets fishingTools entries to false, and ReadyToFish to true by default
+	 * constructor sets fishingTools entries to false, initializes number of Caught fish
+	 * and maps the vacationer thread to another main thread.
 	 */
-	public Vacationer(Vacation v){
+	public Vacationer(Vacation v, int n){
 		fishingTools = new boolean[2];
 		fishingTools[0]=false;
 		fishingTools[1]=false;
-		ReadyToFish = true;
 		CaughtFish = 0;
 		vac=v;
+		name=n;
 	}
 	/*
-	 * These release and acquire methods toggle what the fishingTools the vacationer possesses.
-	 */
-	public void acquireFishingRod(){
-		fishingTools[0]=true;
-	}
-	public void releaseFishingRod(){
-		fishingTools[0]=false;
-	}
-	public void acquireBait(){
-		fishingTools[1]=true;
-	}
-	public void releaseBait(){
-		fishingTools[0]=false;
-	}
-	/*
-	 * getter and setters for the number of caught fish.
+	 * getter and setters 
 	 */
 	public int getCaughtFish(){
 		return CaughtFish;
@@ -54,26 +42,42 @@ public class Vacationer implements Runnable {
 	public void setCaughtFish(int c){
 		CaughtFish=c;
 	}
+	public int getVacationersName(){
+		return this.name;
+	}
+	public void SetName(int i){
+		name = i;
+	}
 	
-	public void run(){
-		
-		while(ReadyToFish){
+	public void exec(){
+		while(System.currentTimeMillis()< 24000){
+		/*
+		 * Use tryAcquire to check availability of rods/bait. If none is initially available then the thread will wait 50ms 
+		 * if no such rod becomes available then the thread progresses to try and acquire some bait. 
+		 * Repeat process until bait and/or rods become available without causing unnecessary deadlocks
+		 */
+		do{
+			try {
+				if(vac.getAvailableRods().tryAcquire(50, TimeUnit.MILLISECONDS)){
+				fishingTools[0]=true;
+				System.out.println("fishing rod acquired for vacationer: "+ name);
+				}
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			try{
+				if(vac.getAvailableBait().tryAcquire(50,TimeUnit.MILLISECONDS)){
+					fishingTools[1]=true;
+					System.out.println("bait acquired for vacationer: " + name);
+			}
+			}catch(Exception e){e.printStackTrace();
+		}
+	}while(fishingTools[0]&&fishingTools[1]);
 			/*
-			 * Attempt to acquire a fishing rod and/or bait, if successful change fishingTools[0], and/or fishingTools[1]
+			 * if both tools are obtained increment fish caught
 			 */
-			try{vac.AvailableRods.acquire();}catch(Exception e){e.printStackTrace();}
-			fishingTools[0]=true;
-			try{vac.AvailableBait.acquire();}catch(Exception e){e.printStackTrace();}
-			fishingTools[1]=true;
-			/*
-			 * if both tools are obtained try to fish
-			 */
-			if(fishingTools[0]&&fishingTools[1]){
-				/*
-				 * fish caught added to total
-				 */
 				Random r = new Random();
-				CaughtFish = CaughtFish + r.nextInt(10);
+				setCaughtFish(getCaughtFish() + r.nextInt(10));
 				/*
 				 * time spent fishing is 20 minutes = 1 second = 1000ms.
 				 */
@@ -81,12 +85,15 @@ public class Vacationer implements Runnable {
 				/*
 				 * release bait, wait 50ms, then release rod.
 				 */
-				try{vac.AvailableBait.release();}catch(Exception e){e.printStackTrace();}
+				try{vac.getAvailableBait().release();}catch(Exception e){e.printStackTrace();}
 				fishingTools[1]=false;
+				System.out.println("bait released by vacationer: " + name); 
+	
 				try{sleep(50);}catch(Exception e){e.printStackTrace();}
-				try{vac.AvailableRods.release();}catch(Exception e){e.printStackTrace();}
+				
+				try{vac.getAvailableRods().release();}catch(Exception e){e.printStackTrace();}
 				fishingTools[0]=false;
-			}
+				System.out.println("Rod released by vacationer: " + name);
 	}
-}
+	}
 }
