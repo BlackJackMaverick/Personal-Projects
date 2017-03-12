@@ -10,7 +10,7 @@ public class Vacation {
 	/*
 	 * array of caught fish
 	 */
-	private int[] FishCaught;
+	public static int fishCaught = 0;
 	/*
 	 * semaphores to handle the number of available rods and bait
 	 */
@@ -32,11 +32,11 @@ public class Vacation {
 	/*
 	 * getters and setters
 	 */
-	public int[] getFishCaught(){
-		return FishCaught;
+	public static int getFishCaught(){
+		return fishCaught;
 	}
-	public void setFishCaught(int[] i){
-		FishCaught=i;
+	public static void addFishCaught(int c){
+		fishCaught = fishCaught + c;
 	}
 	public Semaphore getAvailableBait(){
 		return AvailableBait;
@@ -96,7 +96,6 @@ public class Vacation {
 		bait[0] = new Bait();
 		bait[1] = new Bait();
 		bait[2] = new Bait();
-		int fishCaught = 0;
 		
 		Vacationer v = new Vacationer(1, rods, bait, fishCaught);
 		v.start();
@@ -109,6 +108,6 @@ public class Vacation {
 		}
 		
 		v.interrupt();
-		System.out.println("Done");
+		System.out.println("Done. Caught " + fishCaught + " fish in total.");
 	}
 }

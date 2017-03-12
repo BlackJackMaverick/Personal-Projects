@@ -41,7 +41,7 @@ public class Vacationer extends Thread {
 		return caughtFish;
 	}
 	public synchronized void addCaughtFish(int c){
-		caughtFish=caughtFish + c;
+		Vacation.addFishCaught(c);
 	}
 	public int getVacationersName(){
 		return this.name;
@@ -124,7 +124,7 @@ public class Vacationer extends Thread {
 		
 		System.out.println("Vacationer_" + name + " is now fishing.");
 		
-		int caught = (int) (Math.random() * (1 - 10)) + 1;
+		int caught = (int) (Math.random() * (10 - 1)) + 1;
 		System.out.println("Vacationer_" + name + " caught " + caught + " fish. Adding to the bucket.");
 		addCaughtFish(caught);
 		
@@ -143,8 +143,15 @@ public class Vacationer extends Thread {
 	}
 	
 	public void run(){
+		
 		while (true){
-			fish();
+			try{
+				fish();
+			}			
+			catch (Exception e) {break;}
+			if(isInterrupted()) {break;}
 		}
+		
+		System.out.println("Vacationer_"+name+" terminated");
 	}
 }
