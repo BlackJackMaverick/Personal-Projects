@@ -111,7 +111,7 @@ public class Vacationer extends Thread {
 				if(rodSuccess){break;}//If acquired rod, break from loop
 			}
 		}
-		System.out.println("Vacationer_" + name + " acquired a rod_"+ (rodId+1) +".");
+		System.out.println("Vacationer_" + name + " acquired rod_"+ (rodId+1) +".");
 		
 		//Try getting bait (see if it's available)
 		while(!baitSuccess){
@@ -124,17 +124,26 @@ public class Vacationer extends Thread {
 		System.out.println("Vacationer_" + name + " acquired bait_" + (baitId+1) + ".");
 		System.out.println("Vacationer_" + name + " is now fishing.");
 		
+		//Fish for 20 minutes (1 second)
+		try {
+			Thread.sleep(1000);
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		//Catch a random number of fish between 1 and 10
 		int caught = (int) (Math.random() * (10 - 1)) + 1;
 		System.out.println("Vacationer_" + name + " caught " + caught + " fish. Adding to the bucket.");
 		addCaughtFish(caught);
 		
-		//Fish for 20 minutes (1 second)
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		//Wait 1 second before releasing resources (50 ms)
+				try {
+					Thread.sleep(50);
+				} 
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		
 		//Release hold on rod and bait
 		rods[rodId].free();
