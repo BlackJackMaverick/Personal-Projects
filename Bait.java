@@ -7,6 +7,7 @@ public class Bait {
 		this.available = true;
 	}
 	
+	//Tries to use bait if it is available. Returns boolean if it was successfully acquired or not
 	public synchronized boolean useBait(){
 		if(!available){
 			return false;
@@ -18,6 +19,7 @@ public class Bait {
 		return true;
 	}
 	
+	//Releases hold on bait
 	public synchronized void free(){
 		available = true;
 	}
