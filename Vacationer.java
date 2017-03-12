@@ -13,7 +13,7 @@ public class Vacationer extends Thread {
 	/*
 	 * A counter for the number of fish caught by a vacationer.
 	 */
-	private int caughtFish;
+	public int caughtFish;
 	
 	public FishingRod[] rods;
 	
@@ -25,9 +25,6 @@ public class Vacationer extends Thread {
 	 * ----removed vacation and n parameters
 	 */
 	public Vacationer(int name, FishingRod[] rods, Bait[] bait){
-		fishingTools = new boolean[2];
-		fishingTools[0]=false;
-		fishingTools[1]=false;
 		caughtFish = 0;
 		this.name = name;
 		this.rods = rods;
@@ -41,6 +38,7 @@ public class Vacationer extends Thread {
 	}
 	public synchronized void addCaughtFish(int c){
 		Vacation.addFishCaught(c);
+		caughtFish++;
 	}
 	public int getVacationersName(){
 		return this.name;
@@ -94,7 +92,7 @@ public class Vacationer extends Thread {
 //	}
 	}
 	
-	public void fish(){
+	public void fish() throws InterruptedException{
 		//used to indicated whether successfully acquired rod/bait
 		boolean rodSuccess=false;
 		boolean baitSuccess=false;
@@ -125,12 +123,7 @@ public class Vacationer extends Thread {
 		System.out.println("Vacationer_" + name + " is now fishing.");
 		
 		//Fish for 20 minutes (1 second)
-		try {
-			Thread.sleep(1000);
-		} 
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Thread.sleep(1000);
 		
 		//Catch a random number of fish between 1 and 10
 		int caught = (int) (Math.random() * (10 - 1)) + 1;
@@ -138,19 +131,12 @@ public class Vacationer extends Thread {
 		addCaughtFish(caught);
 		
 		//Wait 1 second before releasing resources (50 ms)
-				try {
-					Thread.sleep(50);
-				} 
-				catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		Thread.sleep(50);
 		
 		//Release hold on rod and bait
-		rods[rodId].free();
-		bait[baitId].free();
-		
 		System.out.println("Vacationer_" + name + " stopped fishing. Releasing rod and bait.");
-		
+		rods[rodId].free();
+		bait[baitId].free();		
 	}
 	
 	public void run(){
@@ -164,6 +150,6 @@ public class Vacationer extends Thread {
 			if(isInterrupted()) {break;}
 		}
 		
-		System.out.println("Vacationer_"+name+" terminated");
+		//System.out.println("Vacationer_"+name+" terminated.");
 	}
 }

@@ -83,19 +83,29 @@ public class Vacation {
 	 */
 	public static void main(String args[]){
 		
-		System.out.println("Starting vacation");
+		//Number of rods and bait for experiment:
+		int r = 4;
+		int b = 4;
+		//To do five trials, variable to store trial number
+		int trial = 1;
+		//Array to store fish caught per vacationer for calculating averages
+		int[][] avg = new int[10][5];
 		
+		//Run 5 trials
+				
 		//Array of rods
-		FishingRod[] rods = new FishingRod[3];
+		FishingRod[] rods = new FishingRod[r];
 		for (int i=0; i < rods.length; i++){
 			rods[i] = new FishingRod();
 		}
 		
 		//Array of bait
-		Bait[] bait = new Bait[3];
+		Bait[] bait = new Bait[b];
 		for (int i=0; i < bait.length; i++){
 			bait[i] = new Bait();
 		}
+		
+		System.out.println("============= Starting vacation: Trial"+trial+" =============");
 		
 		//Make and start 10 vacationer threads
 		vacationers = new Vacationer[10];
@@ -104,18 +114,19 @@ public class Vacation {
 			vacationers[i].start();
 		}
 		
-		
-		//Day of 8 hours = 24 seconds. For quicker testing, put 10 seconds.
+		//Day of 8 hours = 24 seconds
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(24000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		//After the day finishes, terminate the vacationers
+		//After the day finishes, count fish caught per vacationer and terminate.
 		for (int i=0; i < vacationers.length; i++){
+			avg[i][trial-1] = vacationers[i].getCaughtFish();
 			vacationers[i].interrupt();
 		}
-		System.out.println("Done. Caught " + fishCaught + " fish in total.");
+		
+		System.out.println("Vacation over. Caught " + fishCaught + " fish in total.\n");
 	}
 }
