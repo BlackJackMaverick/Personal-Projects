@@ -97,22 +97,25 @@ public class Vacation {
 			bait[i] = new Bait();
 		}
 		
+		//Make and start 10 vacationer threads
 		vacationers = new Vacationer[10];
+		for (int i=0; i < vacationers.length; i++){
+			vacationers[i] = new Vacationer(i+1, rods, bait);
+			vacationers[i].start();
+		}
 		
-		//for now, testing with one vacationer. Eventually to make 10.
-		Vacationer v = new Vacationer(1, rods, bait);
-		v.start();
-		Vacationer v2 = new Vacationer(2, rods, bait);
-		v2.start();
 		
+		//Day of 8 hours = 24 seconds. For quicker testing, put 10 seconds.
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		v.interrupt();
+		//After the day finishes, terminate the vacationers
+		for (int i=0; i < vacationers.length; i++){
+			vacationers[i].interrupt();
+		}
 		System.out.println("Done. Caught " + fishCaught + " fish in total.");
 	}
 }

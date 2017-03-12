@@ -45,9 +45,6 @@ public class Vacationer extends Thread {
 	public int getVacationersName(){
 		return this.name;
 	}
-//	public void SetName(int i){
-//		name = i;
-//	}
 	
 	public void exec(){
 //		while(System.currentTimeMillis()< 24000){
@@ -101,50 +98,55 @@ public class Vacationer extends Thread {
 		//used to indicated whether successfully acquired rod/bait
 		boolean rodSuccess=false;
 		boolean baitSuccess=false;
+		
+		//used to indicate which rod or bait was acquired
 		int rodId =0;
 		int baitId=0;
 		
-		//check if any rod is available
+		//Try getting a rod (see if it's available)
 		while(!rodSuccess){
 			for(int i=0; i < rods.length; i++){
 				rodSuccess = rods[i].useRod();
 				rodId = i;
-				if(rodSuccess){break;}
+				if(rodSuccess){break;}//If acquired rod, break from loop
 			}
 		}
-		System.out.println("Vacationer_" + name + " acquired a rod.");
+		System.out.println("Vacationer_" + name + " acquired a rod_"+ (rodId+1) +".");
 		
+		//Try getting bait (see if it's available)
 		while(!baitSuccess){
 			for(int j=0; j < bait.length; j++){
 				baitSuccess = bait[j].useBait();
 				baitId = j;
-				if(baitSuccess){break;}
+				if(baitSuccess){break;}//If acquired bait, break from loop
 			}
 		}
-		System.out.println("Vacationer_" + name + " acquired bait.");
-		
+		System.out.println("Vacationer_" + name + " acquired bait_" + (baitId+1) + ".");
 		System.out.println("Vacationer_" + name + " is now fishing.");
 		
+		//Catch a random number of fish between 1 and 10
 		int caught = (int) (Math.random() * (10 - 1)) + 1;
 		System.out.println("Vacationer_" + name + " caught " + caught + " fish. Adding to the bucket.");
 		addCaughtFish(caught);
 		
+		//Fish for 20 minutes (1 second)
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Test values: " + rodId + " and " + baitId );
+		//Release hold on rod and bait
 		rods[rodId].free();
 		bait[baitId].free();
 		
-		System.out.println("Vacationer_" + name + " stopped fishing.");
+		System.out.println("Vacationer_" + name + " stopped fishing. Releasing rod and bait.");
 		
 	}
 	
 	public void run(){
 		
+		//While alive, try fishing
 		while (true){
 			try{
 				fish();
