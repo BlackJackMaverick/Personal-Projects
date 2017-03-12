@@ -109,6 +109,7 @@ public class Vacationer extends Thread {
 			for(int i=0; i < rods.length; i++){
 				rodSuccess = rods[i].useRod();
 				rodId = i;
+				if(rodSuccess){break;}
 			}
 		}
 		System.out.println("Vacationer_" + name + " acquired a rod.");
@@ -117,6 +118,7 @@ public class Vacationer extends Thread {
 			for(int j=0; j < bait.length; j++){
 				baitSuccess = bait[j].useBait();
 				baitId = j;
+				if(baitSuccess){break;}
 			}
 		}
 		System.out.println("Vacationer_" + name + " acquired bait.");

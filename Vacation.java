@@ -6,7 +6,7 @@ public class Vacation {
 	/*
 	 * queue of vacationers using a FIFO model, initialized to 10 in constructor.
 	 */
-	private Vacationer[] Vacationers;
+	public static Vacationer[] vacationers;
 	/*
 	 * array of caught fish
 	 */
@@ -51,55 +51,59 @@ public class Vacation {
 		AvailableRods=s;
 	}
 	public void Execute() {			
-		/*
-		 * Assuming all threads execute at same time, the start of a thread is the same for all others, 
-		 * as well when one thread terminates as do all others
-		 */
-		for(int i=0;i<Vacationers.length;i++){
-			Vacationers[i].exec();
-		}
-		/*
-		 * if a thread is still alive do not proceed. However assuming all threads begin and end at the same time,
-		 * if one thread terminates so do the others
-		 */
-		while(!Vacationers[9].isAlive());
-		/*
-		 * print out of fish caught by vacationers
-		 */
-		for(int i=0;i<Vacationers.length;i++){
-			System.out.println("Vacationer " + Vacationers[i].getVacationersName()+ " caught: " + Vacationers[i].getCaughtFish()+ " fish.");
-		}
-		/*
-		 * Calculation and printout of total fish caught
-		 */
-		int total=0;
-		for(int i=0;i<Vacationers.length;i++){
-			total= total+Vacationers[i].getCaughtFish();
-		}
-		System.out.println("The total amount of fish caught is: " + total);
+//		/*
+//		 * Assuming all threads execute at same time, the start of a thread is the same for all others, 
+//		 * as well when one thread terminates as do all others
+//		 */
+//		for(int i=0;i<Vacationers.length;i++){
+//			Vacationers[i].exec();
+//		}
+//		/*
+//		 * if a thread is still alive do not proceed. However assuming all threads begin and end at the same time,
+//		 * if one thread terminates so do the others
+//		 */
+//		while(!Vacationers[9].isAlive());
+//		/*
+//		 * print out of fish caught by vacationers
+//		 */
+//		for(int i=0;i<Vacationers.length;i++){
+//			System.out.println("Vacationer " + Vacationers[i].getVacationersName()+ " caught: " + Vacationers[i].getCaughtFish()+ " fish.");
+//		}
+//		/*
+//		 * Calculation and printout of total fish caught
+//		 */
+//		int total=0;
+//		for(int i=0;i<Vacationers.length;i++){
+//			total= total+Vacationers[i].getCaughtFish();
+//		}
+//		System.out.println("The total amount of fish caught is: " + total);
 }
 	/*
 	 * main method
 	 */
 	public static void main(String args[]){
-		/*
-		 * parameters of vacation to change the size of bait and rod semaphores. 
-		 */
 		
 		System.out.println("Starting vacation");
 		
+		//Array of rods
 		FishingRod[] rods = new FishingRod[3];
 		for (int i=0; i < rods.length; i++){
 			rods[i] = new FishingRod();
 		}
 		
+		//Array of bait
 		Bait[] bait = new Bait[3];
 		for (int i=0; i < bait.length; i++){
 			bait[i] = new Bait();
 		}
 		
+		vacationers = new Vacationer[10];
+		
+		//for now, testing with one vacationer. Eventually to make 10.
 		Vacationer v = new Vacationer(1, rods, bait);
 		v.start();
+		Vacationer v2 = new Vacationer(2, rods, bait);
+		v2.start();
 		
 		try {
 			Thread.sleep(10000);
