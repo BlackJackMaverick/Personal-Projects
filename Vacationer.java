@@ -24,7 +24,7 @@ public class Vacationer extends Thread {
 	 * and maps the vacationer thread to another main thread.
 	 * ----removed vacation and n parameters
 	 */
-	public Vacationer(int name, FishingRod[] rods, Bait[] bait, int fishCaught){
+	public Vacationer(int name, FishingRod[] rods, Bait[] bait){
 		fishingTools = new boolean[2];
 		fishingTools[0]=false;
 		fishingTools[1]=false;
@@ -32,7 +32,6 @@ public class Vacationer extends Thread {
 		this.name = name;
 		this.rods = rods;
 		this.bait = bait;
-		this.caughtFish = fishCaught;
 	}
 	/*
 	 * getter and setters 

@@ -89,15 +89,16 @@ public class Vacation {
 		System.out.println("Starting vacation");
 		
 		FishingRod[] rods = new FishingRod[3];
-		rods[0] = new FishingRod();
-		rods[1] = new FishingRod();
-		rods[2] = new FishingRod();
-		Bait[] bait = new Bait[3];
-		bait[0] = new Bait();
-		bait[1] = new Bait();
-		bait[2] = new Bait();
+		for (int i=0; i < rods.length; i++){
+			rods[i] = new FishingRod();
+		}
 		
-		Vacationer v = new Vacationer(1, rods, bait, fishCaught);
+		Bait[] bait = new Bait[3];
+		for (int i=0; i < bait.length; i++){
+			bait[i] = new Bait();
+		}
+		
+		Vacationer v = new Vacationer(1, rods, bait);
 		v.start();
 		
 		try {
