@@ -1,6 +1,8 @@
+import java.awt.List;
 import java.util.concurrent.Semaphore;
 
 public class Vacation {
+	
 	/*
 	 * queue of vacationers using a FIFO model, initialized to 10 in constructor.
 	 */
@@ -17,16 +19,16 @@ public class Vacation {
 	/*
 	 * constructor to initialize variables, and vacationers
 	 */
-	public Vacation(int R, int B){
-		Vacationers = new Vacationer[10];
-		FishCaught = new int[10];
-		AvailableBait=new Semaphore(B,true);
-		AvailableRods=new Semaphore(R,true);
-		for(int i =0;i<Vacationers.length;i++){
-			Vacationers[i]=new Vacationer(this,i);
-			FishCaught[i]=0;
-		}
-	}
+//	public Vacation(int R, int B){
+//		Vacationers = new Vacationer[10];
+//		FishCaught = new int[10];
+//		AvailableBait=new Semaphore(B,true);
+//		AvailableRods=new Semaphore(R,true);
+//		for(int i =0;i<Vacationers.length;i++){
+//			Vacationers[i]=new Vacationer(this,i);
+//			FishCaught[i]=0;
+//		}
+//	}
 	/*
 	 * getters and setters
 	 */
@@ -83,7 +85,30 @@ public class Vacation {
 		/*
 		 * parameters of vacation to change the size of bait and rod semaphores. 
 		 */
-		Vacation v = new Vacation(3,3);
-		v.Execute();
+		
+		System.out.println("Starting vacation");
+		
+		FishingRod[] rods = new FishingRod[3];
+		rods[0] = new FishingRod();
+		rods[1] = new FishingRod();
+		rods[2] = new FishingRod();
+		Bait[] bait = new Bait[3];
+		bait[0] = new Bait();
+		bait[1] = new Bait();
+		bait[2] = new Bait();
+		int fishCaught = 0;
+		
+		Vacationer v = new Vacationer(1, rods, bait, fishCaught);
+		v.start();
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		v.interrupt();
+		System.out.println("Done");
 	}
 }
