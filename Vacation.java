@@ -65,7 +65,7 @@ public class Vacation {
 			bait[i] = new Bait();
 		}
 		
-		System.out.println("============= Starting vacation: Trial "+trial+" =============");
+		System.out.println("\n============= Starting vacation: Trial "+trial+" =============");
 		
 		fishCaught = 0;
 		
@@ -93,7 +93,7 @@ public class Vacation {
 		
 		//Day of 8 hours = 24 seconds
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(24000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +110,7 @@ public class Vacation {
 		
 		//Small wait until next trial
 		if(trial != 5){
-			System.out.println("Waiting 5 seconds to start next trial.\n");
+			System.out.println("Waiting 5 seconds to start next trial.");
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
@@ -126,7 +126,7 @@ public class Vacation {
 		for(int i=0; i <10; i++){
 			System.out.println("Vacationer_"+(i+1)+": "+((avg[i][0]+avg[i][1]+avg[i][2]+avg[i][3]+avg[i][4])/5));
 		}
-		System.out.println("Average total caught: " + ((totals[0]+totals[1]+totals[2]+totals[3]+totals[4])/5) + "\n");
+		System.out.println("Average total caught: " + ((totals[0]+totals[1]+totals[2]+totals[3]+totals[4])/5));
 		
 	}
 }
