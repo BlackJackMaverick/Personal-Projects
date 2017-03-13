@@ -5,12 +5,6 @@ public class Vacationer extends Thread {
 	
 	private int name;
 	/*
-	 * the instance variable 'fishingTools' represents if a vacationer has a fishing rod and/or bait
-	 * fishingTools[0] represents the acquisition of a fishing rod. True value indicates the vacationer has a rod
-	 * fishingTools[1] represents the acquisition of some bait. True value indicates the vacationer has some bait.
-	 */
-	private boolean[] fishingTools;
-	/*
 	 * A counter for the number of fish caught by a vacationer.
 	 */
 	public int caughtFish;
@@ -23,9 +17,7 @@ public class Vacationer extends Thread {
 	public boolean slacker;
 	
 	/*
-	 * constructor sets fishingTools entries to false, initializes number of Caught fish
-	 * and maps the vacationer thread to another main thread.
-	 * ----removed vacation and n parameters
+	 * constructor
 	 */
 	public Vacationer(int name, FishingRod[] rods, Bait[] bait){
 		caughtFish = 0;
@@ -42,66 +34,18 @@ public class Vacationer extends Thread {
 		this.bait = bait;
 		this.slacker = slacker;
 	}
+	
 	/*
 	 * getter and setters 
 	 */
 	public int getCaughtFish(){
 		return caughtFish;
 	}
+	
+	//synchronized to act as a monitor
 	public synchronized void addCaughtFish(int c){
 		Vacation.addFishCaught(c);
 		caughtFish++;
-	}
-	public int getVacationersName(){
-		return this.name;
-	}
-	
-	public void exec(){
-//		while(System.currentTimeMillis()< 24000){
-//		/*
-//		 * Use tryAcquire to check availability of rods/bait. If none is initially available then the thread will wait 50ms 
-//		 * if no such rod becomes available then the thread progresses to try and acquire some bait. 
-//		 * Repeat process until bait and/or rods become available without causing unnecessary deadlocks
-//		 */
-//		do{
-//			try {
-//				if(vac.getAvailableRods().tryAcquire(50, TimeUnit.MILLISECONDS)){
-//				fishingTools[0]=true;
-//				System.out.println("fishing rod acquired for vacationer: "+ name);
-//				}
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
-//			try{
-//				if(vac.getAvailableBait().tryAcquire(50,TimeUnit.MILLISECONDS)){
-//					fishingTools[1]=true;
-//					System.out.println("bait acquired for vacationer: " + name);
-//			}
-//			}catch(Exception e){e.printStackTrace();
-//		}
-//	}while(fishingTools[0]&&fishingTools[1]);
-//			/*
-//			 * if both tools are obtained increment fish caught
-//			 */
-//				Random r = new Random();
-//				setCaughtFish(getCaughtFish() + r.nextInt(10));
-//				/*
-//				 * time spent fishing is 20 minutes = 1 second = 1000ms.
-//				 */
-//				try{sleep(1000);}catch(Exception e){e.printStackTrace();}
-//				/*
-//				 * release bait, wait 50ms, then release rod.
-//				 */
-//				try{vac.getAvailableBait().release();}catch(Exception e){e.printStackTrace();}
-//				fishingTools[1]=false;
-//				System.out.println("bait released by vacationer: " + name); 
-//	
-//				try{sleep(50);}catch(Exception e){e.printStackTrace();}
-//				
-//				try{vac.getAvailableRods().release();}catch(Exception e){e.printStackTrace();}
-//				fishingTools[0]=false;
-//				System.out.println("Rod released by vacationer: " + name);
-//	}
 	}
 	
 	public void fish() throws InterruptedException{
