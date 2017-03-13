@@ -19,6 +19,9 @@ public class Vacationer extends Thread {
 	
 	public Bait[] bait;
 	
+	//To indicate if this vacationer is the slacker that will delay releasing the rod and bait
+	public boolean slacker;
+	
 	/*
 	 * constructor sets fishingTools entries to false, initializes number of Caught fish
 	 * and maps the vacationer thread to another main thread.
@@ -29,6 +32,15 @@ public class Vacationer extends Thread {
 		this.name = name;
 		this.rods = rods;
 		this.bait = bait;
+		this.slacker = false;
+	}
+	
+	public Vacationer(int name, FishingRod[] rods, Bait[] bait, boolean slacker){
+		caughtFish = 0;
+		this.name = name;
+		this.rods = rods;
+		this.bait = bait;
+		this.slacker = slacker;
 	}
 	/*
 	 * getter and setters 
@@ -130,13 +142,26 @@ public class Vacationer extends Thread {
 		System.out.println("Vacationer_" + name + " caught " + caught + " fish. Adding to the bucket.");
 		addCaughtFish(caught);
 		
-		//Wait 1 second before releasing resources (50 ms)
-		Thread.sleep(50);
+		//Wait 1 second before releasing resources (50 ms). If I am the slacker vacationer,
+		//wait 100ms.
+		if(slacker){
+			System.out.println("**** Vacationer_"+name+" slacking. *****");
+			Thread.sleep(100);
+		}
+		else{
+			Thread.sleep(50);
+		}
 		
 		//Release hold on rod and bait
 		System.out.println("Vacationer_" + name + " stopped fishing. Releasing rod and bait.");
 		rods[rodId].free();
-		bait[baitId].free();		
+		bait[baitId].free();
+		
+		//If at any point the thread terminates, release it's hold on the rods and bait
+		if(isInterrupted()) {
+			rods[rodId].free();
+			bait[baitId].free();
+		}
 	}
 	
 	public void run(){
