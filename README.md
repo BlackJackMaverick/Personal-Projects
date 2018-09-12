@@ -15,8 +15,8 @@ All feedback and suggestions for improvement are always welcome.
 * I recall playing this game for many years growing up and decided to build an algorithm to create and solve these popular puzzles.
 * I use my knowledge of combinatorics and mathematics to come up with a solution.
 * The algorithm uses a reduction technique that involves
-** Building a sudoku solution
-** reducing the solution down as much as possible so that it is still solvable in an iterative process. 
+  * Building a sudoku solution
+  * reducing the solution down as much as possible so that it is still solvable in an iterative process. 
 * Developed using Java
 
 ## Image_Processing.zip
