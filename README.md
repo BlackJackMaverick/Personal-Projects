@@ -29,3 +29,8 @@ The repo storing all the azure automation scripts have been stored at a more sec
 If you would like permission to access this private repo please send me a request at my email: *iymen-abdella@hotmail.com*
 Or check out the repo at **https://averymemorablerepo.visualstudio.com/_projects**
 
+# **Regarding the Simulation and Modelling Content**
+* This was a class project that involved a team of 5 people.
+* As a result there were multiple contributions to the work, but my portion had to do primarily with the implementation of the software in Java
+* The simulation was based off a framework provided by the professor, but it also required input from our team
+* The complete repository can be found at: *https://github.com/cannotparse/SMRental* 
